@@ -1,13 +1,25 @@
 let currentPage = 1;
 
 const selectedFoods = [];
+const selectedExtras = [];
 
 let selectedPlace = "";
+let selectedMood = "";
+let selectedDress = "";
+let selectedColor = "";
 
 
-// -------------------------
+// =========================
+// GOOGLE SHEETS WEB APP
+// =========================
+
+const GOOGLE_SCRIPT_URL =
+    "https://script.google.com/macros/s/AKfycbxTuZjqJeZR_JUpB3ku2vjfWt0r-Yn0bWBPt8evZ_MhZV6lqo9qrYUd41CqMYzX_IyY/exec";
+
+
+// =========================
 // PAGE CHANGE
-// -------------------------
+// =========================
 
 function nextPage() {
 
@@ -15,7 +27,9 @@ function nextPage() {
         `page${currentPage}`
     );
 
-    current.classList.remove("active");
+    if (current) {
+        current.classList.remove("active");
+    }
 
     currentPage++;
 
@@ -34,9 +48,9 @@ function nextPage() {
 }
 
 
-// -------------------------
+// =========================
 // NORMAL OPTIONS
-// -------------------------
+// =========================
 
 function chooseSingle(button) {
 
@@ -49,12 +63,29 @@ function chooseSingle(button) {
         });
 
     button.classList.add("selected");
+
+    const answer = button.innerText.trim();
+
+    // Page 2 = How are you?
+    if (currentPage === 2) {
+        selectedMood = answer;
+    }
+
+    // Page 5 = Dress
+    if (currentPage === 5) {
+        selectedDress = answer;
+    }
+
+    // Page 6 = Colour
+    if (currentPage === 6) {
+        selectedColor = answer;
+    }
 }
 
 
-// -------------------------
+// =========================
 // FOOD - MULTIPLE SELECTION
-// -------------------------
+// =========================
 
 function toggleFood(button) {
 
@@ -100,19 +131,37 @@ function updateFoodText() {
 }
 
 
-// -------------------------
+// =========================
 // EXTRA OPTIONS
-// -------------------------
+// =========================
 
 function toggleExtra(button) {
 
+    const extra = button.innerText.trim();
+
     button.classList.toggle("selected");
+
+    if (button.classList.contains("selected")) {
+
+        if (!selectedExtras.includes(extra)) {
+            selectedExtras.push(extra);
+        }
+
+    } else {
+
+        const index =
+            selectedExtras.indexOf(extra);
+
+        if (index !== -1) {
+            selectedExtras.splice(index, 1);
+        }
+    }
 }
 
 
-// -------------------------
+// =========================
 // PLACE
-// -------------------------
+// =========================
 
 function setPlace(place) {
 
@@ -144,9 +193,9 @@ function savePlace() {
 }
 
 
-// -------------------------
+// =========================
 // DATE
-// -------------------------
+// =========================
 
 function finishQuestions() {
 
@@ -183,9 +232,9 @@ function finishQuestions() {
 }
 
 
-// -------------------------
+// =========================
 // SUMMARY
-// -------------------------
+// =========================
 
 function updateSummary() {
 
@@ -238,13 +287,80 @@ function updateSummary() {
 }
 
 
-// -------------------------
+// =========================
+// SEND ANSWERS TO GOOGLE SHEETS
+// =========================
+
+function sendResponseToSheet() {
+
+    const dateValue =
+        document.getElementById(
+            "dateInput"
+        ).value;
+
+
+    const response = {
+
+        mood:
+            selectedMood || "Not selected",
+
+        food:
+            selectedFoods.length
+                ? selectedFoods.join(", ")
+                : "Not selected",
+
+        place:
+            selectedPlace || "Not selected",
+
+        dress:
+            selectedDress || "Not selected",
+
+        color:
+            selectedColor || "Not selected",
+
+        extras:
+            selectedExtras.length
+                ? selectedExtras.join(", ")
+                : "Not selected",
+
+        date:
+            dateValue || "Not selected"
+    };
+
+
+    // Send without opening another page
+    fetch(GOOGLE_SCRIPT_URL, {
+
+        method: "POST",
+
+        mode: "no-cors",
+
+        headers: {
+            "Content-Type":
+                "text/plain;charset=utf-8"
+        },
+
+        body: JSON.stringify(response)
+
+    }).catch(error => {
+
+        console.log(
+            "Response could not be sent:",
+            error
+        );
+
+    });
+}
+
+
+// =========================
 // THE NO BUTTON
-// -------------------------
+// =========================
 
 function escapeNo() {
 
-    const button = document.getElementById("noButton");
+    const button =
+        document.getElementById("noButton");
 
     if (!button) return;
 
@@ -253,24 +369,40 @@ function escapeNo() {
 
     const padding = 25;
 
-    const buttonWidth = button.offsetWidth;
-    const buttonHeight = button.offsetHeight;
+    const buttonWidth =
+        button.offsetWidth;
 
-    const maxX = window.innerWidth - buttonWidth - padding;
-    const maxY = window.innerHeight - buttonHeight - padding;
+    const buttonHeight =
+        button.offsetHeight;
+
+    const maxX =
+        window.innerWidth -
+        buttonWidth -
+        padding;
+
+    const maxY =
+        window.innerHeight -
+        buttonHeight -
+        padding;
 
     const x =
         Math.floor(
-            Math.random() * Math.max(maxX - padding, 1)
+            Math.random() *
+            Math.max(maxX - padding, 1)
         ) + padding;
 
     const y =
         Math.floor(
-            Math.random() * Math.max(maxY - padding, 1)
+            Math.random() *
+            Math.max(maxY - padding, 1)
         ) + padding;
 
-    button.style.left = `${x}px`;
-    button.style.top = `${y}px`;
+    button.style.left =
+        `${x}px`;
+
+    button.style.top =
+        `${y}px`;
+
 
     const texts = [
         "no",
@@ -285,51 +417,77 @@ function escapeNo() {
     ];
 
     button.innerText =
-        texts[Math.floor(Math.random() * texts.length)];
+        texts[
+            Math.floor(
+                Math.random() *
+                texts.length
+            )
+        ];
 }
 
 
-document.addEventListener("mousemove", function(event) {
+// =========================
+// MAKE NO BUTTON RUN AWAY
+// =========================
 
-    const button =
-        document.getElementById("noButton");
+document.addEventListener(
+    "mousemove",
+    function(event) {
 
-    if (!button) return;
+        const button =
+            document.getElementById(
+                "noButton"
+            );
 
-    const page =
-        document.getElementById("page9");
+        if (!button) return;
 
-    if (!page.classList.contains("active")) {
-        return;
+        const page =
+            document.getElementById(
+                "page9"
+            );
+
+        if (!page.classList.contains(
+            "active"
+        )) {
+            return;
+        }
+
+        const rect =
+            button.getBoundingClientRect();
+
+        const centerX =
+            rect.left +
+            rect.width / 2;
+
+        const centerY =
+            rect.top +
+            rect.height / 2;
+
+        const distance =
+            Math.hypot(
+                event.clientX - centerX,
+                event.clientY - centerY
+            );
+
+        if (distance < 100) {
+            escapeNo();
+        }
+
     }
-
-    const rect =
-        button.getBoundingClientRect();
-
-    const centerX =
-        rect.left + rect.width / 2;
-
-    const centerY =
-        rect.top + rect.height / 2;
-
-    const distance =
-        Math.hypot(
-            event.clientX - centerX,
-            event.clientY - centerY
-        );
-
-    if (distance < 100) {
-        escapeNo();
-    }
-});
+);
 
 
-// -------------------------
+// =========================
 // YES
-// -------------------------
+// =========================
 
 function sayYes() {
 
+    // Save her answers
+    sendResponseToSheet();
+
+
+    // Show success page
     document
         .getElementById("page9")
         .classList.remove("active");
@@ -348,9 +506,9 @@ function sayYes() {
 }
 
 
-// -------------------------
+// =========================
 // LITTLE HEARTS
-// -------------------------
+// =========================
 
 function makeHearts() {
 
@@ -412,19 +570,20 @@ function makeHearts() {
 
                 {
                     transform:
-                        `translateY(50vh) rotate(90deg)`,
+                        "translateY(50vh) rotate(90deg)",
                     opacity: 1
                 },
 
                 {
                     transform:
-                        `translateY(110vh) rotate(180deg)`,
+                        "translateY(110vh) rotate(180deg)",
                     opacity: 0
                 }
             ],
             {
                 duration:
-                    3000 + Math.random() * 2500,
+                    3000 +
+                    Math.random() * 2500,
 
                 easing: "ease-out",
 
