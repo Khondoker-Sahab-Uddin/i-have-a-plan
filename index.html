@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>i have a plan</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;1,500&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="doodle doodle-one">♡</div>
+    <div class="doodle doodle-two">✦</div>
+    <div class="doodle doodle-three">~</div>
+
+    <main>
+
+        <!-- INTRO -->
+        <section class="page active" id="page1">
+
+            <div class="small-note">a little something</div>
+
+            <h1>i have a plan.</h1>
+
+            <p class="intro-text">
+                hey you,<br>
+                i've been thinking we should<br>
+                probably hang out.
+            </p>
+
+            <p class="handwritten">
+                so... I made this.
+            </p>
+
+            <button class="main-button" onclick="nextPage()">
+                okay, let's see →
+            </button>
+
+            <p class="bottom-note">
+                don't worry, it's not a very serious questionnaire.
+            </p>
+
+        </section>
+
+
+        <!-- HOW ARE YOU -->
+        <section class="page" id="page2">
+
+            <div class="counter">01</div>
+
+            <p class="eyebrow">first things first</p>
+
+            <h2>how are you?</h2>
+
+            <p class="description">
+                be honest. i'll accept almost anything.
+            </p>
+
+            <div class="simple-options">
+
+                <button onclick="chooseSingle(this)">pretty good</button>
+                <button onclick="chooseSingle(this)">could be better</button>
+                <button onclick="chooseSingle(this)">actually great</button>
+                <button onclick="chooseSingle(this)">ask me later</button>
+
+            </div>
+
+            <button class="next-link" onclick="nextPage()">
+                noted. next →
+            </button>
+
+        </section>
+
+
+        <!-- FOOD -->
+        <section class="page" id="page3">
+
+            <div class="counter">02</div>
+
+            <p class="eyebrow">the important one</p>
+
+            <h2>what are we eating?</h2>
+
+            <p class="description">
+                you can pick more than one. obviously.
+            </p>
+
+            <div class="food-grid">
+
+                <button class="food" onclick="toggleFood(this)" data-food="Coffee">
+                    <span class="food-image">☕</span>
+                    <span>coffee</span>
+                </button>
+
+                <button class="food" onclick="toggleFood(this)" data-food="Pizza">
+                    <span class="food-image">🍕</span>
+                    <span>pizza</span>
+                </button>
+
+                <button class="food" onclick="toggleFood(this)" data-food="Burger">
+                    <span class="food-image">🍔</span>
+                    <span>burger</span>
+                </button>
+
+                <button class="food" onclick="toggleFood(this)" data-food="Pasta">
+                    <span class="food-image">🍝</span>
+                    <span>pasta</span>
+                </button>
+
+                <button class="food" onclick="toggleFood(this)" data-food="Fries">
+                    <span class="food-image">🍟</span>
+                    <span>fries</span>
+                </button>
+
+                <button class="food" onclick="toggleFood(this)" data-food="Dessert">
+                    <span class="food-image">🍰</span>
+                    <span>dessert</span>
+                </button>
+
+                <button class="food" onclick="toggleFood(this)" data-food="Something spicy">
+                    <span class="food-image">🌶</span>
+                    <span>something spicy</span>
+                </button>
+
+                <button class="food" onclick="toggleFood(this)" data-food="Drinks">
+                    <span class="food-image">🧋</span>
+                    <span>drinks</span>
+                </button>
+
+            </div>
+
+            <p class="selected-text" id="foodSelected">
+                nothing selected yet
+            </p>
+
+            <button class="next-link" onclick="nextPage()">
+                okay, noted →
+            </button>
+
+        </section>
+
+
+        <!-- PLACE -->
+        <section class="page" id="page4">
+
+            <div class="counter">03</div>
+
+            <p class="eyebrow">next question</p>
+
+            <h2>where should we go?</h2>
+
+            <p class="description">
+                somewhere nice. somewhere you like.
+            </p>
+
+            <div class="place-options">
+
+                <button onclick="setPlace('somewhere cozy')">
+                    somewhere cozy
+                </button>
+
+                <button onclick="setPlace('somewhere new')">
+                    somewhere new
+                </button>
+
+                <button onclick="setPlace('somewhere quiet')">
+                    somewhere quiet
+                </button>
+
+            </div>
+
+            <div class="input-line">
+                <input
+                    type="text"
+                    id="placeInput"
+                    placeholder="or tell me where..."
+                >
+            </div>
+
+            <button class="next-link" onclick="savePlace()">
+                sounds good →
+            </button>
+
+        </section>
+
+
+        <!-- DRESS -->
+        <section class="page" id="page5">
+
+            <div class="counter">04</div>
+
+            <p class="eyebrow">small detail</p>
+
+            <h2>what are you wearing?</h2>
+
+            <p class="description">
+                asking for completely innocent reasons.
+            </p>
+
+            <div class="simple-options">
+
+                <button onclick="chooseSingle(this)">traditional</button>
+                <button onclick="chooseSingle(this)">casual</button>
+                <button onclick="chooseSingle(this)">formal</button>
+                <button onclick="chooseSingle(this)">western</button>
+                <button onclick="chooseSingle(this)">i'll decide later</button>
+
+            </div>
+
+            <button class="next-link" onclick="nextPage()">
+                noted 👀 →
+            </button>
+
+        </section>
+
+
+        <!-- COLOR -->
+        <section class="page" id="page6">
+
+            <div class="counter">05</div>
+
+            <p class="eyebrow">one more thing</p>
+
+            <h2>any particular colour?</h2>
+
+            <p class="description">
+                no pressure. just curious.
+            </p>
+
+            <div class="color-options">
+
+                <button onclick="chooseSingle(this)">
+                    <span class="dot pink"></span>
+                    pink
+                </button>
+
+                <button onclick="chooseSingle(this)">
+                    <span class="dot red"></span>
+                    red
+                </button>
+
+                <button onclick="chooseSingle(this)">
+                    <span class="dot black"></span>
+                    black
+                </button>
+
+                <button onclick="chooseSingle(this)">
+                    <span class="dot white"></span>
+                    white
+                </button>
+
+                <button onclick="chooseSingle(this)">
+                    <span class="dot blue"></span>
+                    blue
+                </button>
+
+                <button onclick="chooseSingle(this)">
+                    <span class="dot purple"></span>
+                    anything works
+                </button>
+
+            </div>
+
+            <button class="next-link" onclick="nextPage()">
+                got it →
+            </button>
+
+        </section>
+
+
+        <!-- EXTRAS -->
+        <section class="page" id="page7">
+
+            <div class="counter">06</div>
+
+            <p class="eyebrow">last little question</p>
+
+            <h2>should i bring anything?</h2>
+
+            <p class="description">
+                choose as many as you want.
+            </p>
+
+            <div class="simple-options">
+
+                <button onclick="toggleExtra(this)">flowers</button>
+                <button onclick="toggleExtra(this)">chocolates</button>
+                <button onclick="toggleExtra(this)">both</button>
+                <button onclick="toggleExtra(this)">surprise me</button>
+                <button onclick="toggleExtra(this)">nothing, just come</button>
+
+            </div>
+
+            <button class="next-link" onclick="nextPage()">
+                okay, we're almost there →
+            </button>
+
+        </section>
+
+
+        <!-- DATE -->
+        <section class="page" id="page8">
+
+            <div class="counter">07</div>
+
+            <p class="eyebrow">actually important</p>
+
+            <h2>when are you free?</h2>
+
+            <p class="description">
+                pick a day. i'll take care of the rest.
+            </p>
+
+            <div class="date-box">
+                <input type="date" id="dateInput">
+            </div>
+
+            <button class="next-link" onclick="finishQuestions()">
+                that's the plan →
+            </button>
+
+        </section>
+
+
+        <!-- FINAL -->
+        <section class="page final-page" id="page9">
+
+            <p class="eyebrow">so...</p>
+
+            <h1>we have a plan.</h1>
+
+            <div class="summary">
+
+                <p>
+                    <span>food</span>
+                    <strong id="summaryFood">whatever you choose</strong>
+                </p>
+
+                <p>
+                    <span>place</span>
+                    <strong id="summaryPlace">somewhere nice</strong>
+                </p>
+
+                <p>
+                    <span>date</span>
+                    <strong id="summaryDate">when you're free</strong>
+                </p>
+
+            </div>
+
+            <p class="final-question">
+                you're actually coming, right?
+            </p>
+
+            <div class="final-buttons">
+
+                <button class="yes-button" onclick="sayYes()">
+                    yes, obviously
+                </button>
+
+                <button
+                    class="no-button"
+                    id="noButton"
+                    onmouseenter="escapeNo()"
+                    onclick="escapeNo()"
+                >
+                    no
+                </button>
+
+            </div>
+
+            <p class="tiny-note">
+                *the no button appears to be nervous.
+            </p>
+
+        </section>
+
+
+        <!-- YES -->
+        <section class="page success-page" id="success">
+
+            <div class="success-mark">♡</div>
+
+            <p class="eyebrow">okay then</p>
+
+            <h1>it's a Hangout! </h1>
+
+            <p class="success-text">
+                i'll see you soon.<br>
+                and yes, i'm looking forward to it.
+            </p>
+
+            <p class="handwritten">
+                don't be late :)
+            </p>
+
+            <div class="little-hearts">
+                ♡ &nbsp; ♡ &nbsp; ♡
+            </div>
+
+        </section>
+
+    </main>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
